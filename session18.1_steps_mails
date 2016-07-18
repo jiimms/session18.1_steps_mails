@@ -1,0 +1,70 @@
+Problem Statement:
+Give the steps for Sending emails from your Rails application.
+
+There are following steps in sending emails:
+1. Create the Mailer.
+		rails g mailer UserMailer
+
+2. Edit the mailer
+		class UserMailer < ActionMailer::Base
+  		default from: 'from@example.com'
+		end
+
+		class UserMailer < ActionMailer::Base
+		  default from: 'notifications@example.com'
+		 
+		  def welcome_email(user)
+		    @user = user
+		    @url  = 'http://example.com/login'
+		    mail(to: @user.email, subject: 'Welcome to My Awesome Site')
+		  end
+		end
+
+3. Create two mailer views for html and plain text:
+		example: HTML:
+		<!DOCTYPE html>
+			<html>
+			  <head>
+			    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+			  </head>
+			  <body>
+			    <h1>Welcome to example.com, <%= @user.name %></h1>
+			    <p>
+			      You have successfully signed up to example.com,
+			      your username is: <%= @user.login %>.<br/>
+			    </p>
+			    <p>
+			      To login to the site, just follow this link: <%= @url %>.
+			    </p>
+			    <p>Thanks for joining and have a great day!</p>
+			  </body>
+			</html>
+
+			Plain Text:
+
+							Welcome to example.com, <%= @user.name %>
+				===============================================
+				 
+				You have successfully signed up to example.com,
+				your username is: <%= @user.login %>.
+				 
+				To login to the site, just follow this link: <%= @url %>.
+				 
+				Thanks for joining and have a great day!
+
+
+
+4. Add configuration in config/environments/development.rb
+		example:
+		config.action_mailer.smtp_settings = {
+  	address: "smtp.gmail.com",
+  	port: 587,
+	  domain: "gmail.com", 
+	  authentication: "plain",
+	  enable_starttls_auto: true,
+	  user_name: "example@gmail.com",
+	  password:  "password"								
+		}
+
+
+5. Call the mailer from appropriate controller
